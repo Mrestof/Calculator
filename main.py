@@ -32,6 +32,16 @@ def home():
 
 @app.get('/calc/{op}')
 def calc(op: Operation, a: float, b: float = 1, send_to_db: bool = True):
+    """
+    Calculate the result of equation that consists of two (or one in case of sqr) operands and the operation sign
+    between them (a op b). Example: a=1, b=2, op=add -> 1 + 2
+
+    :param op: Operation to do with two operands
+    :param a: First (left) operand
+    :param b: Second (right) operand
+    :param send_to_db: If True - result of calculation will be sent to the MongoDB
+    :return: Dict with operands, op-sign and solution or with error message
+    """
     output = {'operation': op.value, 'operands': [a, b]}
 
     if op == op.add:
@@ -56,6 +66,13 @@ def calc(op: Operation, a: float, b: float = 1, send_to_db: bool = True):
 
 @app.get('/compute')
 def compute(equation: str, send_to_db: bool = True):
+    """
+    Compute the result of a given equation as a string like any other calculator.
+
+    :param equation: String with math equation.
+    :param send_to_db: If True - result of calculation will be sent to the MongoDB
+    :return: Dict with equation and solution or with error message
+    """
     try:
         output = {'equation': equation.replace(' ', ''), 'result': eval(equation)}
     except SyntaxError:
